@@ -38,6 +38,7 @@
 		AE3AB8451A5C1D6F0000E84E /* TinyImageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinyImageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE3AB84A1A5C1D6F0000E84E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE3AB84B1A5C1D6F0000E84E /* TinyImageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TinyImageTests.m; sourceTree = "<group>"; };
+		AE3AB8551A5C1D7D0000E84E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +62,7 @@
 		AE3AB8261A5C1D6F0000E84E = {
 			isa = PBXGroup;
 			children = (
+				AE3AB8551A5C1D7D0000E84E /* README.md */,
 				AE3AB8311A5C1D6F0000E84E /* TinyImage */,
 				AE3AB8481A5C1D6F0000E84E /* TinyImageTests */,
 				AE3AB8301A5C1D6F0000E84E /* Products */,
