@@ -13,6 +13,7 @@
 		AE3AB83D1A5C1D6F0000E84E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE3AB83C1A5C1D6F0000E84E /* Images.xcassets */; };
 		AE3AB8401A5C1D6F0000E84E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE3AB83E1A5C1D6F0000E84E /* Main.storyboard */; };
 		AE3AB84C1A5C1D6F0000E84E /* TinyImageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AE3AB84B1A5C1D6F0000E84E /* TinyImageTests.m */; };
+		AE3AB8591A5D68100000E84E /* ImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AE3AB8581A5D68100000E84E /* ImageModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,8 @@
 		AE3AB84A1A5C1D6F0000E84E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE3AB84B1A5C1D6F0000E84E /* TinyImageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TinyImageTests.m; sourceTree = "<group>"; };
 		AE3AB8551A5C1D7D0000E84E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		AE3AB8571A5D68100000E84E /* ImageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageModel.h; sourceTree = "<group>"; };
+		AE3AB8581A5D68100000E84E /* ImageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,12 +84,8 @@
 		AE3AB8311A5C1D6F0000E84E /* TinyImage */ = {
 			isa = PBXGroup;
 			children = (
-				AE3AB8341A5C1D6F0000E84E /* AppDelegate.h */,
-				AE3AB8351A5C1D6F0000E84E /* AppDelegate.m */,
-				AE3AB8391A5C1D6F0000E84E /* ViewController.h */,
-				AE3AB83A1A5C1D6F0000E84E /* ViewController.m */,
-				AE3AB83C1A5C1D6F0000E84E /* Images.xcassets */,
-				AE3AB83E1A5C1D6F0000E84E /* Main.storyboard */,
+				AE3AB8561A5D67FC0000E84E /* Model */,
+				AE3AB85A1A5D683A0000E84E /* GUI */,
 				AE3AB8321A5C1D6F0000E84E /* Supporting Files */,
 			);
 			path = TinyImage;
@@ -116,6 +115,28 @@
 				AE3AB84A1A5C1D6F0000E84E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AE3AB8561A5D67FC0000E84E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AE3AB8571A5D68100000E84E /* ImageModel.h */,
+				AE3AB8581A5D68100000E84E /* ImageModel.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		AE3AB85A1A5D683A0000E84E /* GUI */ = {
+			isa = PBXGroup;
+			children = (
+				AE3AB8341A5C1D6F0000E84E /* AppDelegate.h */,
+				AE3AB8351A5C1D6F0000E84E /* AppDelegate.m */,
+				AE3AB8391A5C1D6F0000E84E /* ViewController.h */,
+				AE3AB83A1A5C1D6F0000E84E /* ViewController.m */,
+				AE3AB83C1A5C1D6F0000E84E /* Images.xcassets */,
+				AE3AB83E1A5C1D6F0000E84E /* Main.storyboard */,
+			);
+			name = GUI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,6 +241,7 @@
 				AE3AB83B1A5C1D6F0000E84E /* ViewController.m in Sources */,
 				AE3AB8381A5C1D6F0000E84E /* main.m in Sources */,
 				AE3AB8361A5C1D6F0000E84E /* AppDelegate.m in Sources */,
+				AE3AB8591A5D68100000E84E /* ImageModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,8 +7,18 @@
 //
 
 #import "ViewController.h"
+#import "ImageModel.h"
 
 @implementation ViewController
+
+- (instancetype)init
+{
+  self = [super init];
+  if (self) {
+    images = [NSMutableArray array];
+  }
+  return self;
+}
 
 - (void)viewDidLoad {
   [super viewDidLoad];
@@ -20,6 +30,26 @@
   [super setRepresentedObject:representedObject];
 
   // Update the view, if already loaded.
+}
+
+- (IBAction)addImage:(id)sender {
+  NSOpenPanel* openDialog = [NSOpenPanel openPanel];
+  [openDialog setPrompt:@"Select Images"];
+  [openDialog setAllowsMultipleSelection:YES];
+  [openDialog setAllowedFileTypes:@[@"jpg", @"png"]];
+  
+  [openDialog beginWithCompletionHandler:^(NSInteger result){
+    NSArray *files = [openDialog URLs];
+    for (NSURL *url in files) {
+     // add to model
+      ImageModel *image = [[ImageModel alloc] init];
+      image.URL = url;
+      image.filename = [[url path] lastPathComponent];
+      
+      [images addObject:image];
+      
+    }
+  }];
 }
 
 - (IBAction)openImage:(id)sender {
@@ -41,7 +71,7 @@
       [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
       [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
       
-      NSString *authStr = [NSString stringWithFormat:@"%@:%@", @"api", @"KEY HERE"];
+      NSString *authStr = [NSString stringWithFormat:@"%@:%@", @"api", @""];
       NSData *authData = [authStr dataUsingEncoding:NSUTF8StringEncoding];
       NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength]];
       [request setValue:authValue forHTTPHeaderField:@"Authorization"];
