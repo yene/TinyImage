@@ -12,5 +12,6 @@
 
 @property (strong) NSString *filename;
 @property (strong) NSURL *URL;
+@property (strong) NSString *status;
 
 @end
