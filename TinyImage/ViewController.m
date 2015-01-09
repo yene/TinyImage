@@ -11,16 +11,9 @@
 
 @implementation ViewController
 
-- (instancetype)init
-{
-  self = [super init];
-  if (self) {
-    images = [NSMutableArray array];
-  }
-  return self;
-}
-
 - (void)viewDidLoad {
+  images = [NSMutableArray array];
+  
   [super viewDidLoad];
 
   // Do any additional setup after loading the view.
@@ -49,6 +42,8 @@
       [images addObject:image];
       
     }
+    [self.tableView reloadData];
+
   }];
 }
 
@@ -122,5 +117,25 @@
    */
 }
 
+#pragma table data source
+- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+  
+  // Get a new ViewCell
+  NSTableCellView *cellView = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
+  
+  // Since this is a single-column table view, this would not be necessary.
+  // But it's a good practice to do it in order by remember it when a table is multicolumn.
+  if( [tableColumn.identifier isEqualToString:@"ImageName"] ) {
+    ImageModel *image = [images objectAtIndex:row];
+    cellView.textField.stringValue = image.filename;
+    return cellView;
+  }
+  return cellView;
+}
+
+
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
+  return [images count];
+}
 
 @end

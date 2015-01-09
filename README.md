@@ -1,6 +1,9 @@
 
 accept jpg and pngs
 
+Inspired from https://imageoptim.com/
+
+
 https://tinypng.com/developers
 
 same ui as imageoptim

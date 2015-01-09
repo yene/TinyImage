@@ -8,9 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ViewController : NSViewController {
+@interface ViewController : NSViewController <NSTableViewDelegate, NSTableViewDataSource> {
   NSMutableArray *images; // contains ImageModel
 }
+@property (weak) IBOutlet NSTableView *tableView;
 
 @end
 
