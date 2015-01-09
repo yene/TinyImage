@@ -13,6 +13,9 @@
 
 - (void)viewDidLoad {
   images = [NSMutableArray array];
+  myQueue = [[NSOperationQueue alloc] init];
+  myQueue.name = @"Download Queue";
+  myQueue.MaxConcurrentOperationCount = 3;
   
   [super viewDidLoad];
 
@@ -45,10 +48,14 @@
       [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:newRowIndex] withAnimation:NSTableViewAnimationEffectGap];
       [self.tableView scrollRowToVisible:newRowIndex];
       
-      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+      __weak ViewController *weakSelf = self;
+      [myQueue addOperationWithBlock:^{
         image.status = @"processing...";
-        [self convertImage:image];
-      });
+        [weakSelf convertImage:image];
+        [[NSOperationQueue mainQueue] addOperationWithBlock: ^ {
+          [weakSelf.tableView reloadData];
+        }];
+      }];
       
     }
   }];
@@ -89,11 +96,6 @@
   NSString *location = [[HTTPResponse allHeaderFields] objectForKey:@"Location"];
   NSString *compressionCount = [[HTTPResponse allHeaderFields] objectForKey:@"Compression-Count"];
   image.status = location;
-  
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [self.tableView reloadData];
-  });
-  
 }
 
 #pragma table data source

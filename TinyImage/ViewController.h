@@ -10,6 +10,7 @@
 
 @interface ViewController : NSViewController <NSTableViewDelegate, NSTableViewDataSource> {
   NSMutableArray *images; // contains ImageModel
+  NSOperationQueue *myQueue;
 }
 @property (weak) IBOutlet NSTableView *tableView;
 
