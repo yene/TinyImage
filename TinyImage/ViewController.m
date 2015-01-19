@@ -41,73 +41,77 @@
       ImageModel *image = [[ImageModel alloc] init];
       image.URL = url;
       image.filename = [[url path] lastPathComponent];
-      image.status = @"uploading...";
+      image.status = @"waiting...";
       [images addObject:image];
       
       NSInteger newRowIndex = [images count]-1;
-      [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:newRowIndex] withAnimation:NSTableViewAnimationEffectGap];
+      NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:newRowIndex];
+      [self.tableView insertRowsAtIndexes:indexSet withAnimation:NSTableViewAnimationEffectGap];
       [self.tableView scrollRowToVisible:newRowIndex];
       
       __weak ViewController *weakSelf = self;
       [myQueue addOperationWithBlock:^{
-        [weakSelf convertImage:image];
         [[NSOperationQueue mainQueue] addOperationWithBlock: ^ {
-          [weakSelf.tableView reloadData];
+          image.status = @"uploading...";
+          [weakSelf.tableView reloadDataForRowIndexes:indexSet columnIndexes:[NSIndexSet indexSetWithIndex:1]];
+        }];
+        
+        
+        NSData *imageData = [NSData dataWithContentsOfURL:image.URL];
+        NSString *postLength = [NSString stringWithFormat:@"%lu", [imageData length]];
+        
+        // Init the URLRequest
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        [request setHTTPMethod:@"POST"];
+        [request setURL:[NSURL URLWithString:@"https://api.tinypng.com/shrink"]];
+        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+        
+        NSString *authStr = [NSString stringWithFormat:@"%@:%@", @"api", @""];
+        NSData *authData = [authStr dataUsingEncoding:NSUTF8StringEncoding];
+        NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength]];
+        [request setValue:authValue forHTTPHeaderField:@"Authorization"];
+        [request setHTTPBody:imageData];
+        
+        NSURLResponse *response;
+        NSData *returnedData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
+        
+        NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
+        NSInteger statusCode = [HTTPResponse statusCode];
+        if (statusCode != 201) {
+          // TODO it did fail, use documented error handling from https://tinypng.com/developers/reference
+        }
+        
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:returnedData options:0 error:nil];
+        
+        long inputSize = [[results valueForKeyPath:@"input.size"] longValue];
+        long outputSize = [[results valueForKeyPath:@"output.size"] longValue];
+        NSString *location = [[HTTPResponse allHeaderFields] objectForKey:@"Location"];
+        NSString *compressionCount = [[HTTPResponse allHeaderFields] objectForKey:@"Compression-Count"];
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock: ^ {
+          self.conversionCount.stringValue = [NSString stringWithFormat:@"%@ of 500", compressionCount];
+          image.status = @"downloading...";
+          [weakSelf.tableView reloadDataForRowIndexes:indexSet columnIndexes:[NSIndexSet indexSetWithIndex:1]];
+        }];
+        
+        NSURL *url = [NSURL URLWithString:location];
+        NSString *localFilePath = [[self downloadDirectory] stringByAppendingPathComponent: [image.URL lastPathComponent]];
+        NSData *thedata = [NSData dataWithContentsOfURL:url];
+        [thedata writeToFile:localFilePath atomically:YES];
+        
+        NSString *saved = [NSByteCountFormatter stringFromByteCount:(inputSize-outputSize) countStyle:NSByteCountFormatterCountStyleFile];
+        NSString *inputSizeString = [NSByteCountFormatter stringFromByteCount:inputSize countStyle:NSByteCountFormatterCountStyleFile];
+        NSString *outputSizeString = [NSByteCountFormatter stringFromByteCount:outputSize countStyle:NSByteCountFormatterCountStyleFile];
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock: ^ {
+          image.status = [NSString stringWithFormat:@"%@ -> %@ (-%@)", inputSizeString, outputSizeString, saved];
+          [weakSelf.tableView reloadDataForRowIndexes:indexSet columnIndexes:[NSIndexSet indexSetWithIndex:1]];
         }];
       }];
       
     }
   }];
-}
-
-- (void)convertImage:(ImageModel *)image;
-{
-  NSData *imageData = [NSData dataWithContentsOfURL:image.URL];
-  NSString *postLength = [NSString stringWithFormat:@"%lu", [imageData length]];
-  
-  // Init the URLRequest
-  NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-  [request setHTTPMethod:@"POST"];
-  [request setURL:[NSURL URLWithString:@"https://api.tinypng.com/shrink"]];
-  [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-  [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-  
-  NSString *authStr = [NSString stringWithFormat:@"%@:%@", @"api", @""];
-  NSData *authData = [authStr dataUsingEncoding:NSUTF8StringEncoding];
-  NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength]];
-  [request setValue:authValue forHTTPHeaderField:@"Authorization"];
-  [request setHTTPBody:imageData];
-  
-  NSURLResponse *response;
-  NSData *returnedData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
-  
-  NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
-  NSInteger statusCode = [HTTPResponse statusCode];
-  if (statusCode != 201) {
-    // TODO it did fail, use documented error handling from https://tinypng.com/developers/reference
-  }
-  
-  NSDictionary *results = [NSJSONSerialization JSONObjectWithData:returnedData options:0 error:nil];
-  
-  NSString *inputSize = [results valueForKeyPath:@"input.size"];
-  NSString *outputSize = [results valueForKeyPath:@"output.size"];
-  NSString *ratio = [results valueForKeyPath:@"output.ratio"];
-  NSString *location = [[HTTPResponse allHeaderFields] objectForKey:@"Location"];
-  NSString *compressionCount = [[HTTPResponse allHeaderFields] objectForKey:@"Compression-Count"];
-  
-  [[NSOperationQueue mainQueue] addOperationWithBlock: ^ {
-    image.status = @"downloading...";
-  }];
-  
-  NSURL *url = [NSURL URLWithString:location];
-  NSString *localFilePath = [[self downloadDirectory] stringByAppendingPathComponent: [image.URL lastPathComponent]];
-  NSData *thedata = [NSData dataWithContentsOfURL:url];
-  [thedata writeToFile:localFilePath atomically:YES];
-  
-  [[NSOperationQueue mainQueue] addOperationWithBlock: ^ {
-    image.status = @"finished";
-  }];
-  
 }
 
 - (NSString *)downloadDirectory {

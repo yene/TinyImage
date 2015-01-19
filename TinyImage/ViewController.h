@@ -13,6 +13,7 @@
   NSOperationQueue *myQueue;
 }
 @property (weak) IBOutlet NSTableView *tableView;
+@property (weak) IBOutlet NSTextField *conversionCount;
 
 @end
 
