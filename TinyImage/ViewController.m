@@ -41,7 +41,7 @@
       ImageModel *image = [[ImageModel alloc] init];
       image.URL = url;
       image.filename = [[url path] lastPathComponent];
-      image.status = @"waiting...";
+      image.status = @"uploading...";
       [images addObject:image];
       
       NSInteger newRowIndex = [images count]-1;
@@ -50,7 +50,6 @@
       
       __weak ViewController *weakSelf = self;
       [myQueue addOperationWithBlock:^{
-        image.status = @"processing...";
         [weakSelf convertImage:image];
         [[NSOperationQueue mainQueue] addOperationWithBlock: ^ {
           [weakSelf.tableView reloadData];
@@ -95,7 +94,26 @@
   NSString *ratio = [results valueForKeyPath:@"output.ratio"];
   NSString *location = [[HTTPResponse allHeaderFields] objectForKey:@"Location"];
   NSString *compressionCount = [[HTTPResponse allHeaderFields] objectForKey:@"Compression-Count"];
-  image.status = location;
+  
+  [[NSOperationQueue mainQueue] addOperationWithBlock: ^ {
+    image.status = @"downloading...";
+  }];
+  
+  NSURL *url = [NSURL URLWithString:location];
+  NSString *localFilePath = [[self downloadDirectory] stringByAppendingPathComponent: [image.URL lastPathComponent]];
+  NSData *thedata = [NSData dataWithContentsOfURL:url];
+  [thedata writeToFile:localFilePath atomically:YES];
+  
+  [[NSOperationQueue mainQueue] addOperationWithBlock: ^ {
+    image.status = @"finished";
+  }];
+  
+}
+
+- (NSString *)downloadDirectory {
+  NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDownloadsDirectory, NSUserDomainMask, YES );
+  return paths[0];
+  
 }
 
 #pragma table data source
