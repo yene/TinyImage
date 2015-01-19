@@ -67,7 +67,7 @@
         [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
         [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
         
-        NSString *authStr = [NSString stringWithFormat:@"%@:%@", @"api", @""];
+        NSString *authStr = [NSString stringWithFormat:@"%@:%@", @"api", [[NSUserDefaults standardUserDefaults] stringForKey:@"apiKey"]];
         NSData *authData = [authStr dataUsingEncoding:NSUTF8StringEncoding];
         NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength]];
         [request setValue:authValue forHTTPHeaderField:@"Authorization"];

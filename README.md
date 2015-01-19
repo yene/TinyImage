@@ -1,13 +1,13 @@
+# setup
+set api key from https://tinypng.com/developers:
+```defaults write com.yannickweiss.TinyImage apiKey KEYHERE``
 
-accept jpg and pngs
+# TODO
+* error messages for
+* look & feel more like imageoptim
 
-Inspired from https://imageoptim.com/
 
-
-https://tinypng.com/developers
-
-same ui as imageoptim
-
-curl -i --user api:YOUR_API_KEY --data-binary @large.png https://api.tinypng.com/shrink
-
-https://tinypng.com/developers/reference
+# Source & Credit
+* curl -i --user api:YOUR_API_KEY --data-binary @large.png https://api.tinypng.com/shrink
+* https://tinypng.com/developers/reference
+* Inspired from https://imageoptim.com/
