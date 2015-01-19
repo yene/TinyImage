@@ -44,6 +44,7 @@
 		AE3AB8571A5D68100000E84E /* ImageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageModel.h; sourceTree = "<group>"; };
 		AE3AB8581A5D68100000E84E /* ImageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageModel.m; sourceTree = "<group>"; };
 		AE3AB85B1A5D79000000E84E /* drag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drag.png; sourceTree = "<group>"; };
+		AE92ADC91A6D773900E4FBD9 /* screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +68,7 @@
 		AE3AB8261A5C1D6F0000E84E = {
 			isa = PBXGroup;
 			children = (
+				AE92ADC91A6D773900E4FBD9 /* screenshot.png */,
 				AE3AB8551A5C1D7D0000E84E /* README.md */,
 				AE3AB8311A5C1D6F0000E84E /* TinyImage */,
 				AE3AB8481A5C1D6F0000E84E /* TinyImageTests */,
@@ -432,6 +434,7 @@
 				AE3AB8511A5C1D6F0000E84E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		AE3AB8521A5C1D6F0000E84E /* Build configuration list for PBXNativeTarget "TinyImageTests" */ = {
 			isa = XCConfigurationList;
@@ -440,6 +443,7 @@
 				AE3AB8541A5C1D6F0000E84E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

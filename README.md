@@ -1,6 +1,8 @@
 # TinyImage
 TinyImages uploads your selected images to tinypng.com and puts a compressed version into your Download folder.
 
+![screenshot](screenshot.png?raw=true)
+
 ## setup
 set api key from https://tinypng.com/developers:
 ```
